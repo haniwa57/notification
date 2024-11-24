@@ -11,20 +11,35 @@
 <body>
     <div class="container">
         <h1>Push.js ブラウザ通知サンプル</h1>
-        <p>ボタンをクリックすると通知が表示されます。</p>
-        <button id="notifyButton">通知を送信</button>
+        <p>通知を送信するには、最初に通知の許可を求めます。</p>
+        
+        <!-- 通知許可ボタン -->
+        <button id="permissionButton">通知を許可する</button>
+        
+        <div id="notifySection" style="display:none;">
+            <p>ボタンをクリックすると通知が表示されます。</p>
+            <button id="notifyButton">通知を送信</button>
+        </div>
     </div>
 
     <script>
-        // 通知許可をリクエスト
-        Push.Permission.request(function() {
-            console.log("ユーザーが通知の許可を与えました！");
-        }, function() {
-            console.log("ユーザーが通知を拒否しました。");
+        // 通知許可ボタン
+        document.getElementById('permissionButton').addEventListener('click', function() {
+            // 通知許可をリクエスト
+            Push.Permission.request(function() {
+                console.log("通知の許可が与えられました！");
+                
+                // 通知許可が得られたら通知送信ボタンを表示
+                document.getElementById('notifySection').style.display = 'block';
+                document.getElementById('permissionButton').style.display = 'none'; // 許可ボタンを非表示
+            }, function() {
+                console.log("通知の許可が拒否されました。");
+                alert("通知の許可が必要です。");
+            });
         });
 
-        // ボタンクリック時に通知を送信
-        document.getElementById("notifyButton").addEventListener("click", function() {
+        // 通知送信ボタン
+        document.getElementById('notifyButton').addEventListener('click', function() {
             Push.create("新しい通知", {
                 body: "これはボタンをクリックしたときに表示された通知です。",
                 icon: "/path/to/icon.png",  // アイコン画像（オプション）
