@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push.js ブラウザ通知サンプル</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Push.js CDN -->
+    <script src="https://cdn.push.js.org/push.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Push.js ブラウザ通知サンプル</h1>
+        <p>ボタンをクリックすると通知が表示されます。</p>
+        <button id="notifyButton">通知を送信</button>
+    </div>
+
+    <script>
+        // 通知許可をリクエスト
+        Push.Permission.request(function() {
+            console.log("ユーザーが通知の許可を与えました！");
+        }, function() {
+            console.log("ユーザーが通知を拒否しました。");
+        });
+
+        // ボタンクリック時に通知を送信
+        document.getElementById("notifyButton").addEventListener("click", function() {
+            Push.create("新しい通知", {
+                body: "これはボタンをクリックしたときに表示された通知です。",
+                icon: "/path/to/icon.png",  // アイコン画像（オプション）
+                timeout: 4000,  // 通知の表示時間（ミリ秒）
+                onClick: function() {
+                    window.focus();  // 通知をクリックしたらブラウザをアクティブに
+                    this.close();    // 通知を閉じる
+                }
+            });
+        });
+    </script>
+</body>
+</html>
